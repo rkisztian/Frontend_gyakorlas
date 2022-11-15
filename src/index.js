@@ -1,4 +1,4 @@
-async function adatMegjelenites(embereklista){
+async function nevMegjelenites(embereklista){
 
     let lista = document.getElementById('emberek');
     lista.textContent = '';
@@ -29,6 +29,20 @@ async function elerhetosegMegjelenites(felhasznalok) {
 
 }
 
+function sulyMegjelenites(felhasznalok) {
+    let magassag = document.getElementById('suly').value;
+    let suly = 0;
+    let felhasznalokSuly = felhasznalok.filter(function(felhasznalok){
+        return felhasznalok.height == magassag;
+    })
+    for (let p of felhasznalokSuly){
+        if (p.height == magassag){
+            suly+= p.weight;
+        }
+    }
+    document.getElementById('sulyossz').textContent = "Súlyösszeg:" + " " +suly;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('osszes').addEventListener('click', async() => {
         let response = await fetch('/users.json');
@@ -39,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
               return -1;
             }
           });
-        adatMegjelenites(felhasznalok);
+          nevMegjelenites(felhasznalok);
         
     });
 
@@ -50,4 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
         elerhetosegMegjelenites(felhasznalok);
         
     });
+
+
+    document.getElementById('sulyosGomb').addEventListener('click', async()=>{
+        let response = await fetch('/users.json');
+        let eredmeny = await response.json();
+        let felhasznalok = eredmeny.users;
+
+        sulyMegjelenites(felhasznalok);
+
+    })
 })
